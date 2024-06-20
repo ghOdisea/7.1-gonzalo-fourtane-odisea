@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt'
-import { SALT_ROUNDS } from '../config/config'
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 import { userSchema } from '../models/user'
+import { SALT_ROUNDS } from '../config/config'
 // import Validation from './validation.js'
 
 const User = mongoose.model('User', userSchema)
