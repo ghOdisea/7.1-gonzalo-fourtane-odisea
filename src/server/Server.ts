@@ -3,18 +3,24 @@ import morgan from 'morgan'
 import cors from 'cors'
 import helmet from 'helmet'
 import http from 'http'
+import mongoose from 'mongoose'
+import { CONNECTION_STRING_MONGO, NODE_ENV, PORT } from './config/config'
 
-import express, { type Router } from 'express'
-import { NODE_ENV, PORT } from './config/config'
+import express from 'express'
+import { UserRepository } from './repositories/user-repository'
 
 export class ServerBootStrap {
   public app = express()
   public httpServer = http.createServer(this.app)
   public io = new SocketServer(this.httpServer, {
     cors: {
-      origin: '*'
+      origin: 'http://localhots:5173'
     }
   })
+
+  public userRepository = new UserRepository()
+  public mongoose = mongoose
+  public uri = CONNECTION_STRING_MONGO
 
   public port = PORT
 
@@ -26,22 +32,35 @@ export class ServerBootStrap {
     this.app.use(morgan('dev'))
     this.app.use(express.urlencoded({ extended: true }))
     this.app.disable('x-powered-by')
-    // Socket connection
+    // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
     this.io.on('connection', socket => {
       socket.on('message', (msg) => {
         socket.broadcast.emit('message', { body: msg.body, user: msg.user })
-        console.log('socket connected')
+        console.log('Socket io connected')
       })
     })
-    // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
+    this.mongoose.connect(this.uri)
+      .then(() => {
+        console.log('Mongoose dbconnected')
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
 
     this.listen()
   }
 
-  router (): Router[] {
-    return [
-      // Aqui van las rutas
-    ]
+  routes (): void {
+    this.app.post('/register', (req, res) => {
+      const { username, password } = req.body
+      console.log(req.body)
+      try {
+        const id = this.userRepository.create({ username, password })
+        res.send({ id })
+      } catch (error: any) {
+        res.status(400).send(error.message)
+      }
+    })
   }
   // Devolver un server de socket para hacer la conexion en el build?
   // ioConnections (): SocketServer {

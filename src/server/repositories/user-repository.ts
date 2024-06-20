@@ -1,61 +1,64 @@
 import bcrypt from 'bcrypt'
-// import DBLocal from 'db-local'
 import { SALT_ROUNDS } from '../config/config'
-import crypto from 'node:crypto'
+import mongoose from 'mongoose'
+import { userSchema } from '../models/user'
 // import Validation from './validation.js'
 
-// const { Schema } = new DBLocal({ path: './db' })             aca va la base de datos...
+const User = mongoose.model('User', userSchema)
 
-const User = Schema('User', { // crear esquema de mongo
-//   _id: { type: String, required: true },
-//   username: { type: String, required: true },
-//   password: { type: String, required: true }
-})
+export interface Login {
+  username: string
+  password: string
+}
 
 export class UserRepository {
-  public username: string
-  public password: string
+  public username = ''
+  public password = ''
 
-  constructor (username: string, password: string) {
-    this.username = username
-    this.password = password
-  }
-
-  async create ({ username, password }): string | null {
+  async create ({ username, password }: Login): Promise<void> {
     // Validaciones de username ( opcional Zod )
     // Validation.username(username)
     // Validation.password(password)
-
     // Asegurarse que el usuario no existe!
-    const user: boolean = User.findOne({ username })
-    if (user) throw new Error('username already exists')
 
-    // Creacion de id y encriptacion de password
-    const id = crypto.randomUUID()
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+    try {
+      // const repeatedUser = await User.findOne({ username })
+      // if (repeatedUser !== null) throw new Error('username already exists')
 
-    User.create({
-      _id: id,
-      username,
-      password: hashedPassword
-    }).save()
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
 
-    return id
+      const user = new User({
+        username,
+        password: hashedPassword
+      })
+      user.save()
+        .then(result => {
+          console.log(result)
+          console.log('User ID : ' + result._id)
+          mongoose.connection.close()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } catch (e: any) {
+      console.log(e.message)
+    }
   }
 
-  async login ({ username, password }) {
+  async login ({ username, password }: Login): Promise<void> {
     // Validation.username(username)
     // Validation.password(password)
 
-    const user: boolean = User.findOne({ username })
-    if (!user) throw new Error('user not found')
+    const userExists = await User.findOne({ username })
+    if (userExists === undefined) throw new Error('user not found')
+    const checkThis = String(userExists?.password)
 
-    const isValid: boolean = await bcrypt.compare(password, user.password)
+    const isValid: boolean = await bcrypt.compare(password, checkThis)
     if (!isValid) throw new Error('password is not valid')
 
-    return {
-      id: user._id,
-      username: user.username
-    }
+    // return {
+    //   id: user._id,
+    //   username: user.username
+    // }
   }
 }

@@ -1,5 +1,12 @@
 import { ServerBootStrap } from './Server'
+import { UserRepository } from './repositories/user-repository'
 
-const APP = new ServerBootStrap()
+export const Server = new ServerBootStrap()
 
-APP.build()
+Server.build()
+
+const User = new UserRepository()
+
+User.create({ username: 'lola', password: '123456' })
+  .then(() => { console.log('user created') })
+  .catch((e) => { console.log(e.message) })
