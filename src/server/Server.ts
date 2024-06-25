@@ -2,13 +2,14 @@ import express from 'express'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import cors from 'cors'
-// import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
+
 import mongoose from 'mongoose'
 import http from 'http'
 import { Server as SocketServer } from 'socket.io'
 
-import { CONNECTION_STRING_MONGO, NODE_ENV, PORT /*, SECRET_JWT_KEY */ } from './config/config'
+import { CONNECTION_STRING_MONGO, NODE_ENV, PORT, SECRET_JWT_KEY } from './config/config'
 import { UserRepository } from './repositories/user-repository'
 
 // Chequeo del token
@@ -36,27 +37,20 @@ export class ServerBootStrap {
     this.app.use(morgan('dev'))
     this.app.use(express.urlencoded({ extended: true }))
     this.app.disable('x-powered-by')
-    // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
-    this.io.on('connection', socket => {
-      socket.on('message', (msg) => {
-        socket.broadcast.emit('message', { body: msg.body, user: msg.user })
-        console.log('Socket io connected')
-      })
+    this.sockets()
+
+    this.app.use((req, res, next) => {
+      const token: string = req.cookies.access_token
+      req.body = { user: null }
+
+      try {
+        const data = jwt.verify(token, SECRET_JWT_KEY)
+        req.body.user = data // Verificar si se envia en el cuerpo o en otro lado.
+      } catch {
+
+      }
+      next()
     })
-
-    // this.app.use((req, res, next) => {
-    //   const token = req.cookies.access_token
-    //   req.session = { user: null }
-
-    //   try {
-    //     const data = jwt.verify(token, SECRET_JWT_KEY)
-    //     req.session.user = data
-
-    //   } catch {
-
-    //   }
-    //   next()
-    // })
 
     this.mongoose.connect(this.uri)
       .then(() => {
@@ -101,6 +95,14 @@ export class ServerBootStrap {
   // ioConnections (): SocketServer {
   //   return
   // }
+
+    this.io.on('connection', socket => {
+      socket.on('message', (msg) => {
+        socket.broadcast.emit('message', { body: msg.body, user: msg.user })
+        console.log('Socket io connected')
+      })
+    // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
+    })
   }
 
   public listen (): void {
