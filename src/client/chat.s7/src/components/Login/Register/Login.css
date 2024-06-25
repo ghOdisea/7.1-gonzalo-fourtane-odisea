@@ -1,0 +1,9 @@
+.login-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+h3{
+    display: flex;
+    justify-content: center;
+}

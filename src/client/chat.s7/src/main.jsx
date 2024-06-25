@@ -7,7 +7,8 @@ import { Register } from './components/Login/Register/Register.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Login /><Register />
+    <Login />
+    <Register />
     <App />
   </React.StrictMode>,
 )
