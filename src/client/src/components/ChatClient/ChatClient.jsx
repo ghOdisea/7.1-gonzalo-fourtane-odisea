@@ -4,20 +4,19 @@ import './ChatClient.css'
 
 const socket = io('http://localhost:3000')
 
+const prevMessages = []
+
 export const ChatClient = () => {
 
     const[message, setMessage] = useState('')
     const[username, setUsername] = useState('')
-    const[listMessages, setListMessages] = useState([
-        {
-        body: 'Welcome to the chat room 1',
-        user: '',
-        } 
-    ])
+    const[prevMessages, setPrevMessages ] = useState([])
+    const[listMessages, setListMessages] = useState([])
+
 //Captura valores y los emite a traves del socket, luego crea el objeto de mensaje, y lo guarda en la lista de mensajes.
     const handleSubmit =  e => {
         e.preventDefault()
-        socket.emit('message', { body: message, user: username})
+        socket.emit('new message', { body: message, user: username})
 
         const newMessage = {
             body: message,
@@ -26,23 +25,32 @@ export const ChatClient = () => {
 
         setListMessages([...listMessages, newMessage])
         setMessage('')
+
     }
-//
+    //
     useEffect( () => {
         const receivedMessage = msg => {
             setListMessages([...listMessages, msg])
         }
-        socket.on('message', receivedMessage)
-        return () => socket.off('message', receivedMessage)
+        socket.on('new message', receivedMessage)
+        
+
+        return () => {
+            socket.off('new message', receivedMessage)
+        }
         
     }, [listMessages])
 
     return (
-        <section className="chat-box">
+            <section className="chat-box">
             <span className="title">Chat-io</span>
             <div className="login-input">
 
-            <input onChange={e => setUsername(e.target.value)} className="txt-username" type="text" placeholder="Your name here"/>
+            <input 
+                onChange={e => setUsername(e.target.value)} 
+                className="txt-username" 
+                type="text" 
+                placeholder="Your name here"/>
             </div>
 
             <div className="div-chat" >

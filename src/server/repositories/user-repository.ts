@@ -2,32 +2,39 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import { userSchema } from '../models/user'
 import { SALT_ROUNDS } from '../config/config'
-import { type Login } from '../utils/Login-I'
+import { type Login } from '../utils/interfaces/Login-I'
+import { type Register } from '../utils/interfaces/Register-I'
 import { Validation } from '../utils/Validation'
+import { type UserSession } from '../utils/interfaces/User-I'
 
 const User = mongoose.model('User', userSchema)
 
 export class UserRepository {
-  public username = ''
-  public password = ''
+  public username = ' '
+  private readonly password = ' '
+  private readonly confirmPass = ' '
 
-  async create ({ username, password }: Login): Promise< mongoose.Types.ObjectId | undefined > {
+  // Creación de cuenta
+  async create ({ username, password, confirmPass }: Register): Promise< mongoose.Types.ObjectId | undefined > {
     // Validaciones de user y pass ( opcional Zod )
     if (!Validation.username(username)) throw new Error('user validation error')
     if (!Validation.password(password)) throw new Error('pass validation error')
+    if (confirmPass !== password) throw new Error('passwords dont match')
 
     try {
       const repeatedUser = await User.findOne({ username })
       if (repeatedUser !== null) throw new Error('username already exists')
 
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS) // Encriptado
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS) // Encriptado de contrasenya
 
-      const user = new User({ // Creacion de usuario
+      // Crear Modelo
+      const user = new User({
         username,
         password: hashedPassword
       })
 
-      user.save() // Guardado
+      // Guardado
+      user.save()
         .then(result => {
           console.log(result)
           console.log('User ID : ' + String(result._id))
@@ -43,20 +50,22 @@ export class UserRepository {
     }
   }
 
-  async login ({ username, password }: Login): Promise<void> {
+  // Inicio de sesión
+  async login ({ username, password }: Login): Promise<UserSession> {
     Validation.username(username)
     Validation.password(password)
 
-    const userExists = await User.findOne({ username })
-    if (userExists === undefined) throw new Error('user not found')
-    const checkThis = String(userExists?.password)
+    const user = await User.findOne({ username })
+    if (user === null) throw new Error('user not found')
 
+    const checkThis = String(user?.password)
     const isValid: boolean = await bcrypt.compare(password, checkThis)
+
     if (!isValid) throw new Error('password is not valid')
 
-    // return {
-    //   id: user._id,
-    //   username: user.username
-    // }
+    return {
+      id: user._id,
+      username: user.username
+    }
   }
 }
