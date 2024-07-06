@@ -1,5 +1,5 @@
 import express from 'express'
-import session from 'express-session'
+// import session from 'express-session'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
@@ -14,6 +14,7 @@ import authRoutes from './routes/auth.routes'
 import messageRoutes from './routes/message.routes'
 import userRoutes from './routes/user.routes'
 
+// Server
 const app = express()
 const httpServer = http.createServer(app)
 const port = PORT
@@ -34,36 +35,19 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.disable('x-powered-by')
 app.use(cookieParser())
+
+// Rutas
 app.use('/api/auth', authRoutes)
 app.use('/api/messages', messageRoutes)
 app.use('/api/users', userRoutes)
 
-app.use(
-  session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: true
-  })
-)
-// Chequeo del token
-// app.use((req, res, next) => {
-//   const accessToken: string = req.cookies.access_token
-//   try {
-//     const data = jwt.verify(accessToken, SECRET_JWT_KEY)
-//     console.log(data)
-//     console.log(req.session.id)
-//   } catch {
-//   }
-//   next()
-// })
-
-// RUTAS
-
-// Requerimiento de usuario
-// app.get('/', (req, res) => {
-//   const { username } = req.session
-//   res.send(username)
-// })
+// app.use(
+//   session({
+//     secret: 'your-secret-key',
+//     resave: false,
+//     saveUninitialized: true
+//   })
+// )
 
 // SOCKETS
 
