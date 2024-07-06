@@ -45,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
       res.status(400).json({ error: 'Invalid user data' })
     }
   } catch (error: any) {
-    console.log('Error in register controller')
+    console.error('Error in register controller')
     res.status(500).json({ error: error.message })
   }
 }

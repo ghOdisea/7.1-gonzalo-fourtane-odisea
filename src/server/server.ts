@@ -1,9 +1,9 @@
 import express from 'express'
 import session from 'express-session'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import cors from 'cors'
-// import jwt from 'jsonwebtoken'
 
 import mongoose from 'mongoose'
 import http from 'http'
@@ -11,6 +11,8 @@ import http from 'http'
 
 import { CONNECTION_STRING_MONGO, NODE_ENV, PORT } from './config/config'
 import authRoutes from './routes/auth.routes'
+import messageRoutes from './routes/message.routes'
+import userRoutes from './routes/user.routes'
 
 const app = express()
 const httpServer = http.createServer(app)
@@ -24,8 +26,6 @@ const uri = CONNECTION_STRING_MONGO
 
 // })
 
-// const messageRepository = new MessageRepository()
-
 // Middlewares
 app.use(express.json())
 app.use(helmet())
@@ -33,8 +33,10 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.disable('x-powered-by')
+app.use(cookieParser())
 app.use('/api/auth', authRoutes)
 app.use('/api/messages', messageRoutes)
+app.use('/api/users', userRoutes)
 
 app.use(
   session({
