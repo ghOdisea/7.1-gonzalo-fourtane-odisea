@@ -1,56 +1,121 @@
 import express from 'express'
+import session from 'express-session'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import cors from 'cors'
-import jwt from 'jsonwebtoken'
-import cookieParser from 'cookie-parser'
+// import jwt from 'jsonwebtoken'
 
 import mongoose from 'mongoose'
 import http from 'http'
-import { Server as SocketServer } from 'socket.io'
+// import { Server as SocketServer } from 'socket.io'
 
-import { CONNECTION_STRING_MONGO, NODE_ENV, PORT, SECRET_JWT_KEY } from './config/config'
-import { UserRepository } from './repositories/user-repository'
-// import { MessageRepository } from './repositories/message-repository'
+import { CONNECTION_STRING_MONGO, NODE_ENV, PORT } from './config/config'
+import authRoutes from './routes/auth.routes'
 
 const app = express()
 const httpServer = http.createServer(app)
 const port = PORT
 const uri = CONNECTION_STRING_MONGO
-const io = new SocketServer(httpServer, {
-  cors: {
-    origin: 'http://localhost:5173/chat'
-  },
-  connectionStateRecovery: {}
+// const io = new SocketServer(httpServer, {
+//   cors: {
+//     origin: 'http://localhost:5173'
+//   },
+//   connectionStateRecovery: {}
 
-})
+// })
 
-const userRepository = new UserRepository()
 // const messageRepository = new MessageRepository()
 
 // Middlewares
 app.use(express.json())
 app.use(helmet())
 app.use(cors())
-app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.disable('x-powered-by')
+app.use('/api/auth', authRoutes)
+app.use('/api/messages', messageRoutes)
 
+app.use(
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true
+  })
+)
 // Chequeo del token
-app.use((req, res, next) => {
-  const accessToken: string = req.cookies.access_token
-  req.body = { user: null }
+// app.use((req, res, next) => {
+//   const accessToken: string = req.cookies.access_token
+//   try {
+//     const data = jwt.verify(accessToken, SECRET_JWT_KEY)
+//     console.log(data)
+//     console.log(req.session.id)
+//   } catch {
+//   }
+//   next()
+// })
 
-  try {
-    const data = jwt.verify(accessToken, SECRET_JWT_KEY)
-    req.body = data // Verificar el envio en el cuerpo. !!
-    console.log(req.body)
-  } catch {
-  }
-  next()
+// RUTAS
+
+// Requerimiento de usuario
+// app.get('/', (req, res) => {
+//   const { username } = req.session
+//   res.send(username)
+// })
+
+// SOCKETS
+
+// io.on('connection', (socket) => {
+//   console.log('User io connected')
+
+//   socket.on('getPrevious messages', roomName => {
+//     try {
+//       const messages = Message.find({ roomName })
+//       return messages
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+//   )
+
+//   // socket.on('join server', socket => {
+//   //   let roomName = req.body.room
+//   //   if (roomName === '') {
+//   //     roomName = 'general'
+//   //   }
+//   //   const messages = Message.find({ roomName })
+//   // })
+
+//   // envio de mensajes
+
+//   socket.on('new message', (msg) => {
+//     const room = String(msg.room)
+//     socket.broadcast.to(room).emit('new message', { body: msg.body, user: msg.user })
+//     // const message = this.messageRepository.sendMessage({ messageContent: msg.body, username: msg.user })
+//     // console.log(message)
+//   })
+
+//   socket.on('join room', async (roomName: string) => {
+//     // const newRoom = {
+//     //   room: roomName,
+//     //   socketId: socket.id
+//     // }
+
+//     // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
+//     await socket.join(roomName)
+//   })
+
+//   socket.on('disconnect', () => {
+//     console.log('A user has disconnected')
+//   })
+// })
+
+httpServer.listen((port), () => {
+  console.log(`Server listening at http://localhost:${port} in ${NODE_ENV} mode`)
+  console.log('Press CTRL-C to stop\n')
 })
 
+// DB connection
 mongoose.connect(uri)
   .then(() => {
     console.log('Mongoose dbconnected')
@@ -58,100 +123,6 @@ mongoose.connect(uri)
   .catch((err): any => {
     console.log(err.message)
   })
-
-// ############# RUTAS ###############
-// Registro de usuario
-app.post('/register', (req, res) => {
-  const { username, password, confirmPass } = req.body
-  console.log(req.body)
-  try {
-    const id = userRepository.create({ username, password, confirmPass })
-    if (id !== undefined) {
-      console.log(id)
-      res.status(200).send('User created successfully')
-    }
-  } catch (error: any) {
-    res.status(400).send(error.message)
-  }
-})
-// Inicio de sesión
-app.post('/login', (req, res) => {
-  const { username, password } = req.body
-
-  try {
-    const user = userRepository.login({ username, password })
-    if (user !== undefined) {
-      const sessionId = user.then((u) => {
-        return u.id
-      })
-      const userSession = user.then((u) => {
-        return u.username
-      })
-      const accessToken = jwt.sign(
-        { id: sessionId, username: userSession },
-        SECRET_JWT_KEY,
-        {
-          expiresIn: '1h'
-        })
-      res
-        .cookie('access_token', accessToken, {
-          httpOnly: true, // la cookie solo se puede acceder desde el servidor.
-          secure: true, // https only,
-          sameSite: 'strict', // solo se puede acceder desde el mismo dominio
-          maxAge: 1000 * 60 * 60
-        })
-        .send({ user, accessToken })
-    }
-  } catch (error) {
-    res.status(401).send('login not allowed')
-  }
-})
-//
-app.post('/chat/rooms/:name', (req, res) => {
-  let roomName = req.params.name
-  if (roomName === '') {
-    roomName = 'general'
-  }
-
-  res.status(200).json({ message: ' home chat healthy ' })
-})
-// Cierre de sesión
-app.post('/logout', (req, res) => {
-  res
-    .clearCookie('access_token')
-})
-
-// ############ SOCKETS ###############
-io.on('connection', socket => {
-  console.log('User io connected')
-
-  // unirse al servidor
-  socket.on('join server', username => {
-
-  })
-
-  // envio de mensajes
-  socket.on('new message', (msg) => {
-    socket.broadcast.emit('new message', { body: msg.body, user: msg.user })
-    // const message = this.messageRepository.sendMessage({ messageContent: msg.body, username: msg.user })
-    // console.log(message)
-  })
-
-  socket.on('join room', async (roomName: string) => {
-    // const newRoom = {
-    //   room: roomName,
-    //   socketId: socket.id
-    // }
-
-    // Cuando se conecte, recibe lo que se envia en el socket ( un cuerpo y un usuario ), y lo transmite a todos los usuarios.
-    await socket.join(roomName)
-  })
-})
-
-httpServer.listen((port), () => {
-  console.log(`Server listening at http://localhost:${port} in ${NODE_ENV} mode`)
-  console.log('Press CTRL-C to stop\n')
-})
 
 /*
 type Rooms = {

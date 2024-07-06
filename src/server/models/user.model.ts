@@ -9,10 +9,13 @@ export const userSchema = new mongoose.Schema({ // crear esquema de mongo
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    minlength: 6
   },
-  createdAt: {
-    type: Date,
-    default: Date.now()
+  profilePicture: {
+    type: String,
+    default: ''
   }
-})
+}, { timestamps: true })
+
+export const User = mongoose.model('User', userSchema)
