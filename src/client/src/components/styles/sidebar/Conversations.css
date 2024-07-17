@@ -1,0 +1,11 @@
+#conversations-container{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    color: black;
+    padding: 20px;
+
+}
+#conversations-container :hover{
+    background-color: lightblue;
+}

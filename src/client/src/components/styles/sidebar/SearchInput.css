@@ -1,0 +1,17 @@
+#search-form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+}
+input{
+    width: 265px;
+    height: 30px;
+    font-size: large;
+    padding: 7px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}

@@ -1,0 +1,18 @@
+#conversation-container{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin: 2px;
+    padding: 20px;
+    background-color: lightgrey;
+    cursor: pointer;
+    border-radius: 21px;
+    -webkit-border-radius: 21px;
+    -moz-border-radius: 21px;
+    -ms-border-radius: 21px;
+    -o-border-radius: 21px;
+}
+
+#contact-container{
+    margin-left: 15px;
+}
