@@ -2,13 +2,13 @@
     background-color: whitesmoke;
     display: flex;
     flex-direction: column;
-    width: 28dvw;
-    height: 50dvh;
+    width: 30dvw;
+    height: 80dvh;
 }
 #sidebar-footer{
     display: flex;
     align-items: center;
     justify-content: center;
     margin: auto;
-    height: 6dvh;
+    height: 12dvh;
 }

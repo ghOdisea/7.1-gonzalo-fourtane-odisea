@@ -1,0 +1,47 @@
+/* Listado de mensajes enviados y recibidos */
+
+#messages-container{
+    height: 60dvh;
+    width: 60dvw;
+}
+
+#chat-message{
+    display: flex;
+    align-items: center;
+    background-color: rgb(243, 221, 221);
+    max-width: 27vw;
+    min-width: 15dvw;
+    width: fit-content;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+
+} 
+
+.msg-received{
+    justify-content: start;
+    margin: 10px auto 10px 10px;
+}
+
+.msg-sent{
+    justify-content: end;
+    margin: 10px 10px 10px auto;
+}
+
+#msg-img{
+    margin: 5px;
+}
+
+#msg-sent
+#msg-content 
+p{
+    padding: 5px 5px 5px 20px;
+}
+
+#msg-received
+#msg-content 
+p{
+    padding: 5px 5px 5px 20px;
+}

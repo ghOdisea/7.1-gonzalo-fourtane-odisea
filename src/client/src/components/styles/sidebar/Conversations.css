@@ -7,5 +7,10 @@
 
 }
 #conversations-container :hover{
-    background-color: lightblue;
+    background-color: rgb(208, 226, 231);
+}
+
+
+#conversations-container .selectedConversation{
+    background-color: rgb(103, 222, 226);
 }

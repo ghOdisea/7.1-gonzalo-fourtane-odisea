@@ -11,9 +11,9 @@ import { type ILogin } from '../utils/interfaces/Login-I'
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, password, confirmPass }: IRegister = req.body
+    const { username, password, confirmPassword }: IRegister = req.body
 
-    if (password !== confirmPass) {
+    if (password !== confirmPassword) {
       return res.status(400).json({ error: 'Passwords do not match' })
     }
 

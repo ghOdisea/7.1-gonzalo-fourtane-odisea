@@ -1,11 +1,20 @@
 import { BiLogOut } from "react-icons/bi";
+import useLogout from "../../hooks/useLogout";
+import { ImSpinner } from "react-icons/im";
 
 const LogoutButton = () => {
+
+  const { loading, logout} = useLogout()
+
   return (
     <div id="sidebar-footer">
-      <a href="">
-        <BiLogOut color="black" size={35} />
-      </a>
+      {!loading ? ( 
+        <BiLogOut color="black" size={35} onClick={logout} />
+      ) : (
+        <ImSpinner />
+      )
+      }
+       
 
     </div>
   )

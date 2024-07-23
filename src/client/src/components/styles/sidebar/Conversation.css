@@ -2,15 +2,16 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    margin: 2px;
+    height: 3dvh;
+    margin: 3px;
     padding: 20px;
     background-color: lightgrey;
     cursor: pointer;
-    border-radius: 21px;
-    -webkit-border-radius: 21px;
-    -moz-border-radius: 21px;
-    -ms-border-radius: 21px;
-    -o-border-radius: 21px;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
 }
 
 #contact-container{

@@ -12,11 +12,12 @@ export interface CustomRequest extends Request {
   userId?: string
 }
 
-export const protectRoute = async (req: Request, res: Response, next: NextFunction) => {
+export const protectRoute = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const accessToken: string | undefined = req.cookies.access_token
+    const accessToken: string = req.cookies.access_token
+    console.log(accessToken)
     if (accessToken === undefined) {
-      return res.status(401).json({ error: 'Unauthorized - No token provided' })
+      return res.status(401).json({ error: 'Unauthorized - No token provided' })// AQUI
     }
 
     const decoded = jwt.verify(accessToken, SECRET_JWT_KEY)
@@ -36,7 +37,7 @@ export const protectRoute = async (req: Request, res: Response, next: NextFuncti
       return res.status(401).json({ error: 'Unauthorized - User not found' })
     }
     // Asigna la data decodificada al request como userId
-    (req as CustomRequest).userId = userID
+    req.userId = String(user._id)
 
     next()
   } catch (error) {

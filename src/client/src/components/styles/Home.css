@@ -3,6 +3,5 @@ h2{
 }
 #home-container{
     display: flex;
-    max-height: 700px;
-    max-width: 1200px;
+
 }
