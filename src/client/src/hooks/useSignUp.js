@@ -12,8 +12,8 @@ const useSignUp = () => {
         setLoading(true)
         try {
             const res = await fetch('/api/auth/register', {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ username, password, confirmPassword })
             })
             const data = await res.json()
@@ -27,7 +27,7 @@ const useSignUp = () => {
             setAuthUser(data)
 
         } catch (error) {
-            toast.error(error)
+            toast.error(error.message)
         }finally{
             setLoading(false)
         }

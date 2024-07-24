@@ -6,10 +6,6 @@
     padding: 20px;
 
 }
-#conversations-container :hover{
-    background-color: rgb(208, 226, 231);
-}
-
 
 #conversations-container .selectedConversation{
     background-color: rgb(103, 222, 226);

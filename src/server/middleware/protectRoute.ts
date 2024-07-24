@@ -15,7 +15,6 @@ export interface CustomRequest extends Request {
 export const protectRoute = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const accessToken: string = req.cookies.access_token
-    console.log(accessToken)
     if (accessToken === undefined) {
       return res.status(401).json({ error: 'Unauthorized - No token provided' })// AQUI
     }

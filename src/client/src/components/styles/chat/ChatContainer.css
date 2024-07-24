@@ -12,7 +12,7 @@
 }
 /* Header */
 header{
-    background-color: lightgray;
+    background-color: rgba(211, 211, 211, 0.784);
     height: 4rem;
     display: flex;
     justify-content: start;
@@ -29,7 +29,11 @@ span{
 
 #messages-container{
     overflow: auto;
-    text-align: center;
     background-color: whitesmoke;
 }
 
+#nochat-selected{
+    text-align: center;
+    font-size: large;
+
+}

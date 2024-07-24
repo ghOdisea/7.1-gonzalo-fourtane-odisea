@@ -4,6 +4,7 @@ import { type Response } from 'express'
 import { type CustomRequest } from '../middleware/protectRoute'
 import { Conversation } from '../models/conversation.model'
 import { Message } from '../models/message.model'
+import { getReceiverSocketId, io } from '../socket/socket'
 
 export const sendMessage = async (req: CustomRequest, res: Response) => {
   try {
@@ -30,13 +31,19 @@ export const sendMessage = async (req: CustomRequest, res: Response) => {
     if (newMessage !== null) {
       conversation?.messages.push(newMessage._id)
     }
-
-    // SOCKET IO FUNCTIONALITY HERE
-
     // await conversation.save()
     // await newMessage.save()
 
     await Promise.all([conversation.save(), newMessage.save()])
+
+    // SOCKET IO FUNCTIONALITY HERE
+
+    const receiverSocketId = getReceiverSocketId(receiverId)
+
+    if (receiverSocketId !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      io.to(receiverSocketId).emit('newMessage', newMessage)
+    }
 
     res.status(201).json(newMessage)
   } catch (error) {
