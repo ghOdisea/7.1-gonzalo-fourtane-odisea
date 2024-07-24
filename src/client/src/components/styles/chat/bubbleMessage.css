@@ -1,9 +1,5 @@
 /* Listado de mensajes enviados y recibidos */
 
-#messages-container{
-    height: 60dvh;
-    width: 60dvw;
-}
 
 #chat-message{
     display: flex;

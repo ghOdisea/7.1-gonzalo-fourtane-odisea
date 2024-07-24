@@ -28,8 +28,10 @@ span{
 }
 
 #messages-container{
+    height: 60dvh;
+    width: 60dvw;
     overflow: auto;
-    background-color: whitesmoke;
+    background-color: rgba(245, 245, 245, 0.631);
 }
 
 #nochat-selected{

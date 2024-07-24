@@ -13,9 +13,9 @@ export const useSocketContext = () => {
 
 // eslint-disable-next-line react/prop-types
 export const SocketContextProvider = ({children}) => {
+    const {authUser} = useAuthContext()
     const [socket, setSocket] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
-    const {authUser} = useAuthContext()
 
     useEffect(() => {
         if(authUser) {

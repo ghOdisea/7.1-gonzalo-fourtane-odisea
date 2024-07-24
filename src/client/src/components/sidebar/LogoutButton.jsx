@@ -9,7 +9,7 @@ const LogoutButton = () => {
   return (
     <div id="sidebar-footer">
       {!loading ? ( 
-        <BiLogOut color="black" size={35} onClick={logout} />
+        <BiLogOut color="black" size={35} onClick={logout} cursor={'pointer'}/>
       ) : (
         <ImSpinner />
       )

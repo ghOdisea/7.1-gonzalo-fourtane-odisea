@@ -11,7 +11,7 @@ const Conversations = () => {
 Conversations:
     {conversations.map((conversation) => (
       <Conversation
-        key={conversation._id}
+        key={conversation.id}
         conversation={conversation}
       />
     ))}

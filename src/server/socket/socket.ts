@@ -15,7 +15,7 @@ const io = new SocketServer(httpServer, {
 
 })
 
-export const getReceiverSocketId: any = (receiverId: any) => {
+export const getReceiverSocketId: any = (receiverId: string) => {
   return userSocketMap[receiverId]
 }
 
