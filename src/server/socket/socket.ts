@@ -1,7 +1,7 @@
 import { Server as SocketServer } from 'socket.io'
 import http from 'http'
 import express from 'express'
-import { type SocketMapping } from '../utils/interfaces/Sockets-I'
+import { SocketManager } from './socketManager'
 
 const app = express()
 const httpServer = http.createServer(app)
@@ -9,34 +9,34 @@ const httpServer = http.createServer(app)
 const io = new SocketServer(httpServer, {
   cors: {
     origin: ['http://localhost:5173'],
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
+    credentials: true
   },
   connectionStateRecovery: {}
 
 })
 
-export const getReceiverSocketId: any = (receiverId: string) => {
-  return userSocketMap[receiverId]
-}
-
-const userSocketMap: SocketMapping = {} // {userId: socketId}
+const socketManager = new SocketManager()
 
 io.on('connection', (socket) => {
-  console.log('a user has connected', socket.id)
+  console.log('A user has connected')
 
   const userId = String(socket.handshake.query.userId)
-  if (userId !== undefined) userSocketMap[userId] = socket.id
+  console.log('User id: ', userId)
+  console.log('Socket id: ', socket.id)
+  if (userId !== undefined) {
+    socketManager.addUser(userId, socket.id)
+  }
 
-  io.emit('getOnlineUsers', Object.keys(userSocketMap))
+  io.emit('getOnlineUsers', socketManager.getOnlineUsers())
 
-  console.log('mapa de usuarios online:', userSocketMap)
-  // Socket.on escucha los eventos, se usa tanto cliente como servidor.
   socket.on('disconnect', () => {
-    console.log('a user has disconnected', socket.id)
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    if (userId !== undefined) delete userSocketMap[userId]
-    io.emit('getOnlineUsers', Object.keys(userSocketMap))
+    console.log('A user has disconnected', socket.id)
+
+    if (userId !== undefined) socketManager.removeUser(userId)
+    io.emit('getOnlineUsers', socketManager.getOnlineUsers())
+    console.log('userSocketMap: ', socketManager.getOnlineUsers())
   })
 })
 
-export { app, io, httpServer }
+export { app, io, httpServer, socketManager }

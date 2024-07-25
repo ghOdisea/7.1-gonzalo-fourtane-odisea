@@ -4,7 +4,7 @@ import { type Response } from 'express'
 import { type CustomRequest } from '../middleware/protectRoute'
 import { Conversation } from '../models/conversation.model'
 import { Message } from '../models/message.model'
-import { getReceiverSocketId, io } from '../socket/socket'
+import { io, socketManager } from '../socket/socket'
 
 export const sendMessage = async (req: CustomRequest, res: Response) => {
   try {
@@ -31,17 +31,16 @@ export const sendMessage = async (req: CustomRequest, res: Response) => {
     if (newMessage !== null) {
       conversation?.messages.push(newMessage._id)
     }
+
     // await conversation.save()
     // await newMessage.save()
-
     await Promise.all([conversation.save(), newMessage.save()])
 
     // SOCKET IO FUNCTIONALITY HERE
 
-    const receiverSocketId = getReceiverSocketId(receiverId)
+    const receiverSocketId = socketManager.getOnlineUser(receiverId)
 
     if (receiverSocketId !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       io.to(receiverSocketId).emit('newMessage', newMessage)
     }
 
@@ -62,7 +61,8 @@ export const getMessages = async (req: CustomRequest, res: Response) => {
     // Get Conversation between both if exists
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, userToChatId] }
-    }).populate('messages') // No trae los Ids, sino que muestra un objeto con los mensajes.
+    }).populate('messages')
+    // No trae los Ids, sino que muestra un objeto con los mensajes.
 
     if (conversation === null || conversation === undefined) {
       return res.status(200).json([])

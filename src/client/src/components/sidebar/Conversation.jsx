@@ -10,6 +10,7 @@ const Conversation = ({conversation}) => {
   const isSelected = selectedConversation?._id === conversation._id
   const {onlineUsers} = useSocketContext()
   const isOnline = onlineUsers.includes(conversation._id)
+  const spanClass = isOnline ? 'online' : 'offline'
 
   return (
     <div id='conversation-container'
@@ -20,7 +21,7 @@ const Conversation = ({conversation}) => {
     <BadgeAvatar />  
     <div id='contact-container'>
       <p>{conversation.username}</p>
-      <span style={{fontSize:'small'}}>{isOnline ? 'Online': 'Offline'}</span>
+      <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>
     </div>
     </div>
   )

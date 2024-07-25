@@ -7,7 +7,7 @@ export default defineConfig({
     server:{
       proxy: {
         "/api":{
-          target: "http://localhost:3000", //TODO VARIABLE .ENV
+          target: "http://localhost:3000" //TODO VARIABLE .ENV
         }
       }
     }

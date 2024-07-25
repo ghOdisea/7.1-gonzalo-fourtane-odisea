@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "./AuthContext";
-import io from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 
 export const SocketContext = createContext()
@@ -20,12 +20,15 @@ export const SocketContextProvider = ({children}) => {
     useEffect(() => {
         if(authUser) {
             const socket = io('http://localhost:3000', {
-                query:{
-                    userId: authUser.id
-                }
+                query: {
+                    userId: authUser._id
+                },
+                withCredentials: true
             })
+            console.log('authUser Id: ', authUser._id)
 
             setSocket(socket)
+
 
             socket.on("getOnlineUsers", (users) => {
                 setOnlineUsers(users)
