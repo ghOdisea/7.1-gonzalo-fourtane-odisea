@@ -1,15 +1,16 @@
-import ChatContainer from "../../components/chat/ChatContainer"
-import SideBar from "../../components/sidebar/SideBar"
+import { Link } from 'react-router-dom'
 import '../../components/styles/Home.css'
 
 const Home = () => {
   return (
     <>
-    <h2>Home</h2>
-    <div id="home-container">
-      <SideBar />
-      <ChatContainer />
-    </div>
+    <h1>Welcome to Shat-App!</h1>
+ 
+    <h3>Home</h3>
+
+    <Link to="/signup">Sign Up</Link>
+    <Link to="/login">Log In</Link>
+
     </>
 
   )

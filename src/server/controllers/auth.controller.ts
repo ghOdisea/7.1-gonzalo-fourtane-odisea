@@ -4,10 +4,14 @@ import { type Request, type Response } from 'express'
 import bcrypt from 'bcrypt'
 
 import { User } from '../models/user.model'
-import { SALT_ROUNDS } from '../config/config'
 import { type IRegister } from '../utils/interfaces/Register-I'
 import { generateTokenAndSetCookie } from '../utils/generateToken'
 import { type ILogin } from '../utils/interfaces/Login-I'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const salt = Number(process.env.SALT_ROUNDS)
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -25,7 +29,7 @@ export const register = async (req: Request, res: Response) => {
 
     // TODO Profile Pic
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+    const hashedPassword = await bcrypt.hash(password, salt)
 
     const newUser = new User({
       username,
@@ -81,7 +85,7 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie('access_token')
-    res.status(200).json({ message: 'Logged out succesfully' })
+    res.status(200).json({ message: 'Logged out succesfully' }).redirect('/')
   } catch (error: any) {
     console.log('Error in log in controller', error.message)
     res.status(500).json({ error: 'Internal server error' })

@@ -1,7 +1,7 @@
 #conversation-container{
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     height: 3dvh;
     margin: 3px;
     padding: 20px;
@@ -13,7 +13,6 @@
     -ms-border-radius: 25px;
     -o-border-radius: 25px;
 }
-
-#contact-container{
-    margin-left: 15px;
+p{
+    margin-right: 15rem;
 }

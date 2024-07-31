@@ -30,14 +30,14 @@
     margin: 5px;
 }
 
-#msg-sent
+#msg-sent,
 #msg-content 
 p{
     padding: 5px 5px 5px 20px;
 }
 
-#msg-received
-#msg-content 
+#msg-received,
+#msg-content,
 p{
     padding: 5px 5px 5px 20px;
 }

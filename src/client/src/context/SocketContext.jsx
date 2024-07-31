@@ -4,6 +4,7 @@ import { useAuthContext } from "./AuthContext";
 import { io } from 'socket.io-client'
 
 
+
 export const SocketContext = createContext()
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -16,24 +17,26 @@ export const SocketContextProvider = ({children}) => {
     const {authUser} = useAuthContext()
     const [socket, setSocket] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
+    
+    const SocketPort = import.meta.env.VITE_SERVER_HOST_URL
 
     useEffect(() => {
-        if(authUser) {
-            const socket = io('http://localhost:3000', {
+        if(authUser!= null) {
+            const socket = io(SocketPort, {
                 query: {
-                    userId: authUser._id
+                    userId: authUser.id
                 },
                 withCredentials: true
             })
-            console.log('authUser Id: ', authUser._id)
+            console.log('authUser Id: ', authUser.id)
 
-            setSocket(socket)
-
-
-            socket.on("getOnlineUsers", (users) => {
-                setOnlineUsers(users)
-            })
-            
+                setSocket(socket)
+                
+                
+                socket.on("getOnlineUsers", (users) => {
+                    setOnlineUsers(users)
+                })
+                
             return () => socket.close()
         }else{
             if(socket){

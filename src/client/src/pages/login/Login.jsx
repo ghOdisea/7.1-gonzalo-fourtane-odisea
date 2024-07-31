@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import useLogin from "../../hooks/useLogin"
+import '../styles/Login-Register.css'
 
 const Login = () => {
 
@@ -16,23 +17,21 @@ const Login = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="login-form">
         <h2>Login</h2>  
-          <div>
-            <label style={{display: "flex"}}>Username:</label>
+          <div className="inputs-container">
+            <label className="input-label">Username:</label>
             <input type="text" 
               value={username}
               onChange={(e) => setUsername(e.target.value)} 
               />
-          </div>  
-          <div>
-            <label style={{display: "flex"}}>Password:</label>
+            <label className="input-label">Password:</label>
             <input type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)} /><br 
               />
           </div>
-        <button type="submit" disabled={loading}>Log in</button>
+        <button type="submit" disabled={loading}>Log in</button><br/>
         <Link to="/signup">First time here? Sign up! </Link>
 
       </form>

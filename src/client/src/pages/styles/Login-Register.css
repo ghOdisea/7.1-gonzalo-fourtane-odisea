@@ -1,0 +1,26 @@
+#login-form,
+#signup-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+}
+
+.input-label{
+    display: flex;
+    font-size: medium;
+}
+
+button{
+    width: 120px;
+    height: 35px;
+    margin: 15px auto;
+    cursor: pointer;
+}
+
+a{
+    margin: 20px;
+    text-align: center;
+}
+

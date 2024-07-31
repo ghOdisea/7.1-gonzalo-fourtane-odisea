@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     console.log('A user has disconnected', socket.id)
 
     if (userId !== undefined) socketManager.removeUser(userId)
+
     io.emit('getOnlineUsers', socketManager.getOnlineUsers())
     console.log('userSocketMap: ', socketManager.getOnlineUsers())
   })

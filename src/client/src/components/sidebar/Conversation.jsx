@@ -18,7 +18,7 @@ const Conversation = ({conversation}) => {
     onClick={() => setSelectedConversation(conversation)}
     >
     {/* Aqui va la imagen: */}
-    <BadgeAvatar />  
+    <BadgeAvatar  />  
     <div id='contact-container'>
       <p>{conversation.username}</p>
       <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>

@@ -10,16 +10,17 @@
 }
 
 #input-form input{
-    width: 50dvw;
+    width: 48dvw;
     height: 3dvh;
     font-size: small;
+    margin-left: 35px;
 }
 #input-form button{
     height: 3dvh;
     width: 5dvw;
-    border-radius: 1rem;
-    -webkit-border-radius: 1rem;
-    -moz-border-radius: 1rem;
-    -ms-border-radius: 1rem;
-    -o-border-radius: 1rem;
+    border-radius: 20%;
+    -webkit-border-radius: 2rem;
+    -moz-border-radius: 20%;
+    -ms-border-radius: 20%;
+    -o-border-radius: 20%;
 }

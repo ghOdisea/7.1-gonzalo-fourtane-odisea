@@ -6,19 +6,22 @@ import cors from 'cors'
 
 import mongoose from 'mongoose'
 
-import { CONNECTION_STRING_MONGO, NODE_ENV, PORT } from './config/config'
 import authRoutes from './routes/auth.routes'
 import messageRoutes from './routes/message.routes'
 import userRoutes from './routes/user.routes'
 
 import { app, httpServer } from './socket/socket'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 // Environment
-const port = PORT
-const uri = CONNECTION_STRING_MONGO
+const port = process.env.SERVER_PORT
+const host = process.env.VITE_CLIENT_HOST_URL
+const uriMongo = String(process.env.DB_URI_MONGO)
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: host,
   credentials: true
 }
 
@@ -37,12 +40,12 @@ app.use('/api/messages', messageRoutes)
 app.use('/api/users', userRoutes)
 
 httpServer.listen((port), () => {
-  console.log(`Server listening at http://localhost:${port} in ${NODE_ENV} mode`)
+  console.log(`Server listening at http://localhost:${port} in ${process.env.NODE_ENV} mode`)
   console.log('Press CTRL-C to stop\n')
 })
 
 // Db connection
-mongoose.connect(uri)
+mongoose.connect(uriMongo)
   .then(() => {
     console.log('Mongoose dbconnected')
   })
