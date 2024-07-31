@@ -76,5 +76,4 @@ npm run dev
 
 Para el correcto funcionamiento del proyecto, asegúrate de configurar las siguientes variables de entorno:
 
-Servidor
-Crea un archivo .env en el directorio server con el contenido del archivo env.txt proporcionado.
+Crea un archivo .env en el directorio principal con el contenido del archivo env.txt proporcionado.
