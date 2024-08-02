@@ -17,7 +17,7 @@ export class SocketManager {
     return Object.keys(this.userSocketMap)
   }
 
-  public getOnlineUser (receiverId: string): string {
+  public getOnlineUser (receiverId: any): string {
     return this.userSocketMap[receiverId]
   }
 }

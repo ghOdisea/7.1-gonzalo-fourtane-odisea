@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "./AuthContext";
-import { io } from 'socket.io-client'
-
-
+import io from 'socket.io-client'
 
 export const SocketContext = createContext()
 
@@ -21,12 +19,13 @@ export const SocketContextProvider = ({children}) => {
     const SocketPort = import.meta.env.VITE_SERVER_HOST_URL
 
     useEffect(() => {
-        if(authUser!= null) {
+        if(authUser) {
             const socket = io(SocketPort, {
                 query: {
                     userId: authUser.id
                 },
-                withCredentials: true
+                // withCredentials: true,
+                // transports: ['websocket', 'polling']
             })
             console.log('authUser Id: ', authUser.id)
 
@@ -46,6 +45,6 @@ export const SocketContextProvider = ({children}) => {
         }
     }, [authUser])
 
-    return <SocketContext.Provider value={{socket, onlineUsers}}> {children} </SocketContext.Provider>
+    return <SocketContext.Provider value={{socket, onlineUsers}}>{children}</SocketContext.Provider>
     
 }

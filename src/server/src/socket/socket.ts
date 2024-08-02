@@ -8,18 +8,17 @@ const httpServer = http.createServer(app)
 
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: ['http://localhost:5173'],
-    methods: ['GET', 'POST'],
-    credentials: true
-  },
-  connectionStateRecovery: {}
+    origin: ['http://localhost:5000'], // ##############################
+    methods: ['GET', 'POST']
+  }
+  // connectionStateRecovery: {}
 
 })
 
 const socketManager = new SocketManager()
 
 io.on('connection', (socket) => {
-  console.log('A user has connected')
+  console.log('A user has connected', socket.id)
 
   const userId = String(socket.handshake.query.userId)
   console.log('User id: ', userId)

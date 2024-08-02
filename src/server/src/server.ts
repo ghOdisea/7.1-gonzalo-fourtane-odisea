@@ -27,17 +27,17 @@ const corsOptions = {
 
 // Middlewares
 app.use(express.json())
+app.use(cookieParser())
 app.use(helmet())
 app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.disable('x-powered-by')
-app.use(cookieParser())
 
 // Routes
 app.use('/api/auth', authRoutes)
-app.use('/api/messages', messageRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/messages', messageRoutes)
 
 httpServer.listen((port), () => {
   console.log(`Server listening at http://localhost:${port} in ${process.env.NODE_ENV} mode`)

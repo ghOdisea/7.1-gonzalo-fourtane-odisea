@@ -37,7 +37,9 @@ export const register = async (req: Request, res: Response) => {
     })
 
     if (newUser !== null) {
-      generateTokenAndSetCookie(newUser._id, res)
+      const userId = newUser._id.toString()
+      
+      generateTokenAndSetCookie(userId, res)
 
       await newUser.save()
 
@@ -68,8 +70,9 @@ export const login = async (req: Request, res: Response) => {
     if (user === null || !isValid) {
       return res.status(400).json({ error: 'Invalid username or password' })
     }
+    const userId = user._id.toString()
 
-    generateTokenAndSetCookie(user._id, res)
+    generateTokenAndSetCookie(userId, res)
 
     res.status(200).json({
       id: user?._id,
@@ -85,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie('access_token')
-    res.status(200).json({ message: 'Logged out succesfully' }).redirect('/')
+    res.status(200).json({ message: 'Logged out succesfully' })
   } catch (error: any) {
     console.log('Error in log in controller', error.message)
     res.status(500).json({ error: 'Internal server error' })

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { type Response } from 'express'
-import { type CustomRequest } from '../middleware/protectRoute'
 import { Conversation } from '../models/conversation.model'
 import { Message } from '../models/message.model'
 import { io, socketManager } from '../socket/socket'
 
-export const sendMessage = async (req: CustomRequest, res: Response) => {
+export const sendMessage = async (req: any, res: Response) => {
   try {
     // Recibo cuerpo del mensaje por input,
     const { msgContent } = req.body
     const { id: receiverId } = req.params
-    const senderId = req.userId
+    const sender = req.user
+    const senderId = sender._id
 
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] }
@@ -52,11 +52,12 @@ export const sendMessage = async (req: CustomRequest, res: Response) => {
   }
 }
 
-export const getMessages = async (req: CustomRequest, res: Response) => {
+export const getMessages = async (req: any, res: Response) => {
   try {
     // Get IDs
     const { id: userToChatId } = req.params
-    const senderId = req.userId
+    const sender = req.user
+    const senderId = sender._id
 
     // Get Conversation between both if exists
     const conversation = await Conversation.findOne({

@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { type Response } from 'express'
-import { type CustomRequest } from '../middleware/protectRoute'
 import { User } from '../models/user.model'
 
-export const getUsersSideBar = async (req: CustomRequest, res: Response) => {
+export const getUsersSideBar = async (req: any, res: Response) => {
   try {
-    const loggedInId = req.userId
+    const onlineUser = req.user
 
-    const allUsersButMe = await User.find({ _id: { $ne: loggedInId } }).select('-password')
+    if (onlineUser === undefined) return res.status(404).json({ Error: 'user not found' })
+
+    const onlineUserId = onlineUser.id
+
+    const allUsersButMe = await User.find({ _id: { $ne: onlineUserId } }).select('-password')
 
     res.status(200).json(allUsersButMe)
   } catch (error) {
