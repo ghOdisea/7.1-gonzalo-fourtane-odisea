@@ -49,8 +49,9 @@ export const register = catchErrors(async (req: Request, res: Response) => {
 
   console.log('newUser: ', newUser)
   return res.status(CREATED).json({
-    message: 'User registered successfully',
-    User: newUser.omitPassword()
+    message: 'User created successfully',
+    id: newUser._id,
+    username
   })
 })
 

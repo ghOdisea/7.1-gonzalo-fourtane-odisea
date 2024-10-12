@@ -19,7 +19,9 @@ const useSignUp = () => {
             })
 
             const data = await res.json()
-            if(data.error){ throw new Error(data.error) }
+            if(data.error){ 
+                throw new Error(data.error)
+            }
 
             localStorage.setItem('chat-user', JSON.stringify(data))
             setAuthUser(data)
