@@ -1,15 +1,24 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { type Request, type Response } from 'express'
 import User from '../models/user.model'
-import appAssert from '../utils/appAssert'
 import catchErrors from '../utils/catchErrors'
 import { type ILogin } from '../utils/interfaces/Login-I'
 import { type IRegister } from '../utils/interfaces/Register-I'
 import { generateTokenAndSetCookie } from '../utils/generateToken'
-import AppErrorCode from '../constants/appErrorCode'
 import { BAD_REQUEST, CONFLICT, CREATED, OK } from '../constants/http'
+import appAssert from '../utils/appAssert'
+import AppErrorCode from '../constants/appErrorCode'
+import { io } from '../socket/socket'
 
 export const register = catchErrors(async (req: Request, res: Response) => {
   const { username, password, confirmPassword }: IRegister = req.body
+
+  if (!username || !password || !confirmPassword) {
+    return res.status(BAD_REQUEST).json({
+      message: 'Missing username or password'
+    })
+  }
+
   if (password !== confirmPassword) {
     return res.status(CONFLICT).json({
       message: 'Passwords do not match'
@@ -19,11 +28,10 @@ export const register = catchErrors(async (req: Request, res: Response) => {
   const existingUser = await User.findOne({ username })
   if (existingUser !== null) {
     return res.status(CONFLICT).json({
-      message: 'User already exists'
+      message: 'Username already exists'
     })
   }
   // TODO Profile Pic
-
   const newUser = await User.create({
     username,
     password
@@ -35,10 +43,9 @@ export const register = catchErrors(async (req: Request, res: Response) => {
     'Invalid user data',
     AppErrorCode.InvalidUserData
   )
-
-  generateTokenAndSetCookie(String(newUser._id), res)
-
   await newUser.save()
+
+  generateTokenAndSetCookie(newUser._id, res)
 
   console.log('newUser: ', newUser)
   return res.status(CREATED).json({
@@ -65,13 +72,13 @@ export const login = catchErrors(async (req: Request, res: Response) => {
     })
   }
 
-  const userId = String(registeredUser._id)
+  generateTokenAndSetCookie(registeredUser._id, res)
 
-  generateTokenAndSetCookie(userId, res)
+  io.emit('userLoggedIn', registeredUser.username)
 
   return res.status(OK).json({
     message: 'Logged in successfully',
-    id: userId,
+    id: registeredUser._id,
     username
     // TODO ENVIAR FOTO DE PERFIL
   }

@@ -4,6 +4,7 @@ import { type Response } from 'express'
 import { Conversation } from '../models/conversation.model'
 import { Message } from '../models/message.model'
 import { io, socketManager } from '../socket/socket'
+import { CONFLICT, CREATED, OK } from '../constants/http'
 
 export const sendMessage = async (req: any, res: Response) => {
   try {
@@ -44,7 +45,7 @@ export const sendMessage = async (req: any, res: Response) => {
       io.to(receiverSocketId).emit('newMessage', newMessage)
     }
 
-    res.status(201).json(newMessage)
+    res.status(CREATED).json(newMessage)
   } catch (error) {
     console.log('Error in sendMessage Controller')
     console.log(error)
@@ -62,18 +63,17 @@ export const getMessages = async (req: any, res: Response) => {
     // Get Conversation between both if exists
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, userToChatId] }
-    }).populate('messages')
-    // No trae los Ids, sino que muestra un objeto con los mensajes.
+    }).populate('messages') // No trae los Ids, sino que muestra un objeto con los mensajes.
 
-    if (conversation === null || conversation === undefined) {
-      return res.status(200).json([])
+    if (conversation === null) {
+      return res.status(OK).json([])
     }
     const messages = conversation.messages
 
     res.status(200).json(messages)
     //
   } catch (error) {
-    console.error('Error in sendMessage Controller')
-    res.status(500).json({ error: 'Internal server error' })
+    console.error('Error in get Messages Controller')
+    res.status(CONFLICT).json({ error: 'Internal server error' })
   }
 }

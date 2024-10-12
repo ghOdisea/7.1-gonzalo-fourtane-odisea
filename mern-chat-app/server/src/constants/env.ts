@@ -1,4 +1,4 @@
-const getEnv = (key: string, defaultValue?: string): string => {
+const getEnv = (key: string, defaultValue?: any): string => {
   const value = process.env[key] ?? defaultValue
 
   if (value === undefined) {
@@ -9,12 +9,12 @@ const getEnv = (key: string, defaultValue?: string): string => {
 // BACK
 export const NODE_ENV = getEnv('NODE_ENV', 'development')
 export const DB_URI_MONGO = getEnv('DB_URI_MONGO')
-export const SERVER_PORT = getEnv('SERVER_PORT', '3000')
-export const SALT_ROUNDS = getEnv('SALT_ROUNDS', '2')
+export const SERVER_PORT = getEnv('SERVER_PORT', 3000)
+export const SALT_ROUNDS = Number(getEnv('SALT_ROUNDS', 2))
 
 // FRONT
 export const VITE_HOST_URL = getEnv('VITE_HOST_URL')
-export const VITE_CLIENT_PORT = getEnv('VITE_CLIENT_PORT', '5000')
+export const VITE_CLIENT_PORT = getEnv('VITE_CLIENT_PORT', 5000)
 
 // AUTH
 export const SECRET_JWT_KEY = getEnv('SECRET_JWT_KEY')

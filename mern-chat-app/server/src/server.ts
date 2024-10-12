@@ -16,7 +16,6 @@ import messageRoutes from './routes/message.routes'
 import userRoutes from './routes/user.routes'
 
 // Environment
-
 const corsOptions = {
   origin: VITE_HOST_URL,
   credentials: true
