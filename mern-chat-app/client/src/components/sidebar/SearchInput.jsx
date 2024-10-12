@@ -28,16 +28,18 @@ const SearchInput = () => {
   }
 
   return (
-    <form id="search-form" onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value) }
-        />
-        <button type="submit" className="searching"><ImSearch /></button>
-        
-    </form>
+    <div className="sidebar-search">
+      <form id="search-form" onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value) }
+            />
+          <button type="submit" className="searching"><ImSearch /></button>
+          
+      </form>
+  </div>
   )
 }
 

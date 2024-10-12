@@ -15,16 +15,18 @@ const MessageInput = () => {
   }
 
   return (
-    <form id="input-form" onSubmit={handleSubmit}>
-        <input 
-        type="text" 
-        placeholder="Send a message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value) }
-        />
-        <button type="submit" disabled={loading}>Send</button>
-
-    </form>
+    <div className="chat-input">
+      <form id="input-form" onSubmit={handleSubmit}>
+          <input 
+          className="sending-input"
+          type="text" 
+          placeholder="Send a message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value) }
+          />
+          <button type="submit" disabled={loading}>Send</button>
+      </form>
+    </div>
   )
 }
 

@@ -2,13 +2,37 @@
     background-color: whitesmoke;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     width: 30dvw;
     height: 80dvh;
+    max-width: 300px;
 }
 #sidebar-footer{
     display: flex;
     align-items: center;
     justify-content: center;
     margin: auto;
-    height: 12dvh;
+    height: 10dvh;
+}
+.sidebar-search{
+    height: 10dvh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#sidebar-conversations{
+    display: flex;
+    flex-direction: column;
+    height: 60dvh;
+    overflow-y: auto;
+    color: black;
+
+}
+#conversations-container{
+    display: flex;
+    position: relative;
+}   
+
+#conversations-container .selectedConversation{
+    background-color: rgb(103, 222, 226);
 }

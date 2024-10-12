@@ -42,7 +42,7 @@ const SignUp = () => {
             onChange={(e)=> setInputs({...inputs, confirmPassword: e.target.value})}
           /><br />
         </div>
-        <button type="submit" disabled={loading} >Register </button><br />
+        <button className='register-button' type="submit" disabled={loading} >Register </button><br />
         <Link to="/login">Already signed up? Log in! </Link>
       </form>
     </div>

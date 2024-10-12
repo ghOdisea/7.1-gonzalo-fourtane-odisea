@@ -7,12 +7,12 @@ import { VITE_CLIENT_PORT } from '../constants/env'
 const app = express()
 const httpServer = http.createServer(app)
 
-const io = new SocketServer(
-  httpServer,
+const io = new SocketServer(httpServer,
   {
     cors: {
       origin: VITE_CLIENT_PORT,
-      methods: ['GET', 'POST']
+      methods: ['GET', 'POST'],
+      credentials: true
     },
     connectionStateRecovery: {}
   }
@@ -26,6 +26,7 @@ io.on('connection', (socket) => {
   const { userId } = socket.handshake.query
   console.log('User id: ', userId)
   console.log('Socket id: ', socket.id)
+
   if (userId !== undefined) {
     socketManager.addUser(String(userId), socket.id)
   }

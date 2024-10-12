@@ -4,20 +4,22 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    max-width: 80dvw;
-    margin-top: auto;
     height: 10dvh;
+    width: 60dvw;
 }
-
-#input-form input{
-    width: 48dvw;
-    height: 3dvh;
-    font-size: small;
-    margin-left: 35px;
+.sending-input{
+    height: 58%;
+    width: 72%;
+    padding-left: 5%;
+    border-radius: 20%;
+    -webkit-border-radius: 2rem;
+    -moz-border-radius: 20%;
+    -ms-border-radius: 20%;
+    -o-border-radius: 20%;
 }
 #input-form button{
-    height: 3dvh;
-    width: 5dvw;
+    height: 40px;
+    width: 75px;
     border-radius: 20%;
     -webkit-border-radius: 2rem;
     -moz-border-radius: 20%;

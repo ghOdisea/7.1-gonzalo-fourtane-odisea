@@ -17,12 +17,10 @@ const Conversation = ({conversation}) => {
     className={isSelected ? 'selectedConversation' : ''} 
     onClick={() => setSelectedConversation(conversation)}
     >
-    {/* Aqui va la imagen: */}
-    <BadgeAvatar  />  
-    <div id='contact-container'>
-      <p>{conversation.username}</p>
-      <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>
-    </div>
+      {/* Aqui va la imagen: */}
+      <BadgeAvatar  />    
+        <p className='name-label'>{conversation.username}</p>
+        <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>
     </div>
   )
 }

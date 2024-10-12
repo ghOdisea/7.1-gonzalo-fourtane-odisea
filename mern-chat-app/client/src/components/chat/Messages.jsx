@@ -17,7 +17,7 @@ const Messages = () => {
 
 
   return (
-    <div id="messages-container">
+    <div id="chat-messages">
 {/* Conversacion con mensajes */}
       {!loading && 
       messages.length > 0 && 

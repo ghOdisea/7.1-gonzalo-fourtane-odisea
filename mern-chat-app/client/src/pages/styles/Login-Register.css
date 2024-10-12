@@ -12,7 +12,8 @@
     font-size: medium;
 }
 
-button{
+.login-button
+.register-button{
     width: 120px;
     height: 35px;
     margin: 15px auto;

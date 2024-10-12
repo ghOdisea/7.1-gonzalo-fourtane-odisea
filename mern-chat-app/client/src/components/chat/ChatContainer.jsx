@@ -23,13 +23,13 @@ const ChatContainer = () => {
       {!selectedConversation? (
         <NoChatSelected />
       ) : (
-      <section>
-        <header>
+      <>
+        <div className="chat-header">
           <span>To:</span><span><strong>{selectedConversation.username}</strong></span>
-        </header>
+        </div>
         <Messages />
         <MessageInput />
-      </section>
+      </>
       )} 
     </div>
   )

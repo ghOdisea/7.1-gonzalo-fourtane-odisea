@@ -35,16 +35,15 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function BadgeAvatar(status) {
 
-  const isOnline = status? 'dot' : 'standard'
+  const isOnline = status? "dot" : "standard"
   return (
     <Stack direction="row" spacing={2}>
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant= {isOnline}
-        color='error'
       >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar alt="#" src="#"/>
       </StyledBadge>
     </Stack>
   );

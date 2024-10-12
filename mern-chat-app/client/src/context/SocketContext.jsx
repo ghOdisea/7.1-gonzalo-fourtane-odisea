@@ -24,13 +24,10 @@ export const SocketContextProvider = ({children}) => {
                 query: {
                     userId: authUser.id
                 },
-                // withCredentials: true,
-                // transports: ['websocket', 'polling']
+                withCredentials: true,
+                transports: ['websocket', 'polling']
             })
-            console.log('authUser Id: ', authUser.id)
-
                 setSocket(socket)
-                
                 
                 socket.on("getOnlineUsers", (users) => {
                     setOnlineUsers(users)

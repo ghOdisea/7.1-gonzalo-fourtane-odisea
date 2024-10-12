@@ -47,9 +47,7 @@ export const sendMessage = async (req: any, res: Response) => {
 
     res.status(CREATED).json(newMessage)
   } catch (error) {
-    console.log('Error in sendMessage Controller')
-    console.log(error)
-    res.status(500).json({ error: 'Internal server error' })
+    res.status(CONFLICT).json({ error: 'Conflict in sendMessage Controller' })
   }
 }
 
@@ -70,8 +68,7 @@ export const getMessages = async (req: any, res: Response) => {
     }
     const messages = conversation.messages
 
-    res.status(200).json(messages)
-    //
+    res.status(OK).json(messages)
   } catch (error) {
     console.error('Error in get Messages Controller')
     res.status(CONFLICT).json({ error: 'Internal server error' })

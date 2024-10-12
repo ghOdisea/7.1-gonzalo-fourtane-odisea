@@ -1,12 +1,10 @@
-#search-form{
+.input-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px;
+    height: 2rem;
 }
 input{
-    width: 20dvw;
-    height: 4dvh;
     font-size: small;
     padding: 3px 0px 3px 6px;
     border-radius: 15px;
