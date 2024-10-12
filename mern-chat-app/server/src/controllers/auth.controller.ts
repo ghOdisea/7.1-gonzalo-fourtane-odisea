@@ -1,96 +1,84 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { type Request, type Response } from 'express'
-import bcrypt from 'bcrypt'
-
-import { User } from '../models/user.model'
+import User from '../models/user.model'
+import appAssert from '../utils/appAssert'
+import catchErrors from '../utils/catchErrors'
+import { type ILogin } from '../utils/interfaces/Login-I'
 import { type IRegister } from '../utils/interfaces/Register-I'
 import { generateTokenAndSetCookie } from '../utils/generateToken'
-import { type ILogin } from '../utils/interfaces/Login-I'
-import dotenv from 'dotenv'
+import AppErrorCode from '../constants/appErrorCode'
+import { BAD_REQUEST, CONFLICT, CREATED, OK } from '../constants/http'
 
-dotenv.config()
-
-const salt = Number(process.env.SALT_ROUNDS)
-
-export const register = async (req: Request, res: Response) => {
-  try {
-    const { username, password, confirmPassword }: IRegister = req.body
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ error: 'Passwords do not match' })
-    }
-
-    const user = await User.findOne({ username })
-
-    if (user !== null) {
-      return res.status(400).json({ error: 'Username already exists' })
-    }
-
-    // TODO Profile Pic
-
-    const hashedPassword = await bcrypt.hash(password, salt)
-
-    const newUser = new User({
-      username,
-      password: hashedPassword
+export const register = catchErrors(async (req: Request, res: Response) => {
+  const { username, password, confirmPassword }: IRegister = req.body
+  if (password !== confirmPassword) {
+    return res.status(CONFLICT).json({
+      message: 'Passwords do not match'
     })
-
-    if (newUser !== null) {
-      const userId = newUser._id.toString()
-      
-      generateTokenAndSetCookie(userId, res)
-
-      await newUser.save()
-
-      res.status(201).json({
-        _id: newUser._id,
-        username: newUser.username
-      })
-    } else {
-      res.status(400).json({ error: 'Invalid user data' })
-    }
-  } catch (error: any) {
-    console.error('Error in register controller')
-    res.status(500).json({ error: error.message })
   }
-}
 
-export const login = async (req: Request, res: Response) => {
-  try {
-    const { username, password }: ILogin = req.body
-
-    const user = await User.findOne({ username })
-
-    const checkThis = String(user?.password)
-    const orThis = ''
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const isValid: boolean = await bcrypt.compare(password, checkThis || orThis)
-
-    if (user === null || !isValid) {
-      return res.status(400).json({ error: 'Invalid username or password' })
-    }
-    const userId = user._id.toString()
-
-    generateTokenAndSetCookie(userId, res)
-
-    res.status(200).json({
-      id: user?._id,
-      username: user?.username
-    } // TODO ENVIAR FOTO DE PERFIL
-    )
-  } catch (error: any) {
-    console.log('Error in log in controller', error.message)
-    res.status(500).json({ error: 'Internal server error' })
+  const existingUser = await User.findOne({ username })
+  if (existingUser !== null) {
+    return res.status(CONFLICT).json({
+      message: 'User already exists'
+    })
   }
-}
+  // TODO Profile Pic
 
-export const logout = async (req: Request, res: Response) => {
-  try {
-    res.clearCookie('access_token')
-    res.status(200).json({ message: 'Logged out succesfully' })
-  } catch (error: any) {
-    console.log('Error in log in controller', error.message)
-    res.status(500).json({ error: 'Internal server error' })
+  const newUser = await User.create({
+    username,
+    password
+  })
+
+  appAssert(
+    newUser,
+    BAD_REQUEST,
+    'Invalid user data',
+    AppErrorCode.InvalidUserData
+  )
+
+  generateTokenAndSetCookie(String(newUser._id), res)
+
+  await newUser.save()
+
+  console.log('newUser: ', newUser)
+  return res.status(CREATED).json({
+    message: 'User registered successfully',
+    User: newUser.omitPassword()
+  })
+})
+
+export const login = catchErrors(async (req: Request, res: Response) => {
+  const { username, password }: ILogin = req.body
+
+  const registeredUser = await User.findOne({ username })
+  if (registeredUser === null) {
+    return res.status(BAD_REQUEST).json({
+      message: 'Invalid username or password'
+    })
   }
-}
+
+  const isValid = await registeredUser.comparePassword(password)
+
+  if (!isValid) {
+    return res.status(BAD_REQUEST).json({
+      message: 'Invalid username or password'
+    })
+  }
+
+  const userId = String(registeredUser._id)
+
+  generateTokenAndSetCookie(userId, res)
+
+  return res.status(OK).json({
+    message: 'Logged in successfully',
+    id: userId,
+    username
+    // TODO ENVIAR FOTO DE PERFIL
+  }
+  )
+})
+
+export const logout = catchErrors(async (_: Request, res: Response) => {
+  res.clearCookie('access_token')
+  res.status(OK).json({ message: 'Logged out succesfully' })
+})

@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express'
 import { login, logout, register } from '../controllers/auth.controller'
+import { OK } from '../constants/http'
 
-const router = express.Router()
+const authRoutes = express.Router()
 
+// Healt
+authRoutes.get('/health', (_, res) => {
+  res.status(OK).json({ message: 'Auth routes OK' })
+})
 // Registro de usuario
-router.post('/register', register)
+authRoutes.post('/register', register)
 
 // Inicio de sesión
-router.post('/login', login)
+authRoutes.post('/login', login)
 
 // cierre de sesión - clear cookies
-router.post('/logout', logout)
+authRoutes.post('/logout', logout)
 
-export default router
+export default authRoutes

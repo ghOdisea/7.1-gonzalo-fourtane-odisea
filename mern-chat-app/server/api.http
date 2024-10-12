@@ -1,0 +1,47 @@
+# AUTH
+GET http://localhost:3000/api/auth/health HTTP/1.1
+###
+
+POST http://localhost:3000/api/auth/register HTTP/1.1
+Content-Type: application/json
+
+{ 
+      "username": "Test-USer", 
+      "password": "samePassword123", 
+      "confirmPassword":"samePassword123" 
+}
+
+###
+POST http://localhost:3000/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{ 
+      "username": "Test-USer", 
+      "password": "samePassword123" 
+}
+###
+POST http://localhost:3000/api/auth/logout HTTP/1.1
+Content-Type: application/json
+
+
+
+###
+
+# PROTECTED ROUTES
+
+## USERS
+GET http://localhost:3000/api/users/health HTTP/1.1
+###
+GET http://localhost:3000/api/users/ HTTP/1.1
+#users sidebar
+###
+
+
+## MESSAGES
+GET http://localhost:3000/api/messages/health HTTP/1.1
+###
+GET http://localhost:3000/api/messages/:id HTTP/1.1
+###
+POST http://localhost:3000/api/messages/send/:id HTTP/1.1
+###
+
