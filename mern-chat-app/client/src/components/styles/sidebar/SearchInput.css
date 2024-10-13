@@ -4,22 +4,13 @@
     justify-content: space-between;
     height: 2rem;
 }
-input{
-    font-size: small;
-    padding: 3px 0px 3px 6px;
-    border-radius: 15px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    -ms-border-radius: 15px;
-    -o-border-radius: 15px;
+#searching-input{
+    margin:10px;
 }
 
-button .searching{
-    height: 3rem;
-    width: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.search-button{
+    height: 2rem;
+    width: 2rem;
     border-radius: 100%;
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;

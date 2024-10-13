@@ -1,5 +1,5 @@
-import Button from '@mui/material/Button';
+import { Button } from "@chakra-ui/react";
 
 export default function ButtonUsage() {
-  return <Button variant ="contained">Click me</Button>;
+  return <Button >Click me</Button>;
 }

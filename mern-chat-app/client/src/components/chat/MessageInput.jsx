@@ -1,5 +1,6 @@
 import { useState } from "react"
 import useSendMessage from "../../hooks/useSendMessage"
+import { Button, Text } from "@chakra-ui/react"
 
 const MessageInput = () => {
 
@@ -17,14 +18,16 @@ const MessageInput = () => {
   return (
     <div className="chat-input">
       <form id="input-form" onSubmit={handleSubmit}>
-          <input 
+          <Text  
           className="sending-input"
-          type="text" 
+          hiddenLabel
+          variant="outlined" 
           placeholder="Send a message"
           value={message}
           onChange={(e) => setMessage(e.target.value) }
+          autoComplete="off"
           />
-          <button type="submit" disabled={loading}>Send</button>
+          <Button type="submit" variant="contained" disabled={loading}>Send</Button>
       </form>
     </div>
   )

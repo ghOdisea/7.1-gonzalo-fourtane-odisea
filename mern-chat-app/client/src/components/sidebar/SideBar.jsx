@@ -1,8 +1,8 @@
 import SearchInput from '../sidebar/SearchInput'
 import Conversations from '../sidebar/Conversations'
 import LogoutButton from '../sidebar/LogoutButton'
-import Divider from '@mui/material/Divider';
 import '../styles/sidebar/SideBar.css'
+import { Divider } from '@chakra-ui/react'
 
 const SideBar = () => {
   return (

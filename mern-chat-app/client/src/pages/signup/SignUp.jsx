@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import useSignUp from "../../hooks/useSignUp"
 import '../styles/Login-Register.css'
+import { Button, Input } from "@chakra-ui/react"
 
 
 const SignUp = () => {
@@ -25,24 +26,24 @@ const SignUp = () => {
         <h2>SignUp</h2>
         <div className="inputs-container">
           <label className="input-label">Username:</label>
-          <input type="text" 
+          <Input type="text" 
             value={inputs.username}
             onChange={(e)=> setInputs({...inputs, username: e.target.value})}
           />
 
           <label className="input-label">Password:</label>
-          <input type="password" 
+          <Input type="password" 
             value={inputs.password}
             onChange={(e)=> setInputs({...inputs, password: e.target.value})}
           />
           
           <label className="input-label">Confirm password:</label>
-          <input type="password" 
+          <Input type="password" 
             value={inputs.confirmPassword}
             onChange={(e)=> setInputs({...inputs, confirmPassword: e.target.value})}
           /><br />
         </div>
-        <button className='register-button' type="submit" disabled={loading} >Register </button><br />
+        <Button className='register-button' type="submit" disabled={loading} colorScheme='teal' size='md' >Register </Button><br />
         <Link to="/login">Already signed up? Log in! </Link>
       </form>
     </div>

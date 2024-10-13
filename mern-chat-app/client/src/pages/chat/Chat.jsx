@@ -9,7 +9,8 @@ const Chat = () => {
 
   return (
     <>
-    <h1>{authUser.username}</h1><hr />
+    <h1>{authUser.username}</h1>
+    <hr />
     <div id="home-container">
       <SideBar />
       <ChatContainer />

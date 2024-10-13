@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Avatar from '@mui/material/Avatar';
+import { Avatar } from '@chakra-ui/react';
 import { useAuthContext } from '../../context/AuthContext';
 // import useConversation from '../../store/useConversation';
 
@@ -17,23 +17,17 @@ const Message = ({message}) => {
 if(fromMe){ return(
 <div id="chat-message" className={chatClassName}>
         <div id="msg-content" className={shakeClass}>
-            <p >
-                {message.msgContent}
-            </p>
+            <p >{message.msgContent}</p>
         </div>
-
-        <div id="msg-img">
-        <Avatar alt="NN" src="/static/images/avatar/1.jpg"/>
-        </div>
+        <Avatar/>
     </div>
   )
 }else{
   return (
     <div id="chat-message" className={chatClassName}>
         <div id="msg-img">
-        <Avatar alt="NN" src="/static/images/avatar/1.jpg"/>
+        <Avatar/>
         </div>
-
         <div id="msg-content" className={shakeClass}>
             <p>
                 {message.msgContent}

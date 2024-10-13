@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import '../styles/sidebar/Conversation.css'
-import BadgeAvatar from './BadgeAvatar'
+import { Avatar, AvatarBadge } from '@chakra-ui/react'
 import useConversation from '../../store/useConversation'
 import { useSocketContext } from '../../context/SocketContext'
 
@@ -10,16 +10,16 @@ const Conversation = ({conversation}) => {
   const isSelected = selectedConversation?._id === conversation._id
   const {onlineUsers} = useSocketContext()
   const isOnline = onlineUsers.includes(conversation._id)
-  const spanClass = isOnline ? 'online' : 'offline'
+  const spanClass = isOnline ? 'green.500' : 'red.500'
 
   return (
     <div id='conversation-container'
     className={isSelected ? 'selectedConversation' : ''} 
     onClick={() => setSelectedConversation(conversation)}
     >
-      {/* Aqui va la imagen: */}
-      <BadgeAvatar  />    
-        <p className='name-label'>{conversation.username}</p>
+      <Avatar name={conversation.username} src={conversation.avatar}>
+      <AvatarBadge  boxSize='1.25em' bg={spanClass}/>    
+      </Avatar>
         <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>
     </div>
   )

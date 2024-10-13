@@ -39,7 +39,7 @@ export default useSignUp
 
 function handleInputErrors({username, password, confirmPassword}){
     if(!username || !password || !confirmPassword){
-        toast.error('Plese fill all fields')
+        toast.error('Please fill all fields')
         return false
     }
     if( password != confirmPassword){

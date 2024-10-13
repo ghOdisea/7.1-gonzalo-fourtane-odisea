@@ -28,11 +28,11 @@
     color: black;
 
 }
-#conversations-container{
+#conversation-container{
     display: flex;
     position: relative;
 }   
 
-#conversations-container .selectedConversation{
-    background-color: rgb(103, 222, 226);
+#sidebar-conversations .selectedConversation{
+    background-color: rgb(96, 226, 230);
 }
