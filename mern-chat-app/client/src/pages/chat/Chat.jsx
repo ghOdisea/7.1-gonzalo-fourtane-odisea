@@ -1,3 +1,4 @@
+import { Container, Heading } from '@chakra-ui/react'
 import ChatContainer from '../../components/chat/ChatContainer'
 import SideBar from '../../components/sidebar/SideBar'
 import '../../components/styles/Home.css'
@@ -9,12 +10,11 @@ const Chat = () => {
 
   return (
     <>
-    <h1>{authUser.username}</h1>
-    <hr />
-    <div id="home-container">
+      <Heading className="home-heading">{authUser.username}</Heading>
+    <Container id="home-container" display={'flex'}>
       <SideBar />
       <ChatContainer />
-    </div>
+    </Container>
     </>
   )
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import '../styles/sidebar/Conversation.css'
-import { Avatar, AvatarBadge } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Box, HStack, Text } from '@chakra-ui/react'
 import useConversation from '../../store/useConversation'
 import { useSocketContext } from '../../context/SocketContext'
 
@@ -10,18 +10,29 @@ const Conversation = ({conversation}) => {
   const isSelected = selectedConversation?._id === conversation._id
   const {onlineUsers} = useSocketContext()
   const isOnline = onlineUsers.includes(conversation._id)
-  const spanClass = isOnline ? 'green.500' : 'red.500'
-
+  const onlineColor = isOnline ? 'green.500' : 'red.500'
   return (
-    <div id='conversation-container'
-    className={isSelected ? 'selectedConversation' : ''} 
-    onClick={() => setSelectedConversation(conversation)}
+    <HStack
+      onClick={() => setSelectedConversation(conversation)}
+      w="100%"
+      p={3}
+      bg={isSelected ? 'teal.100' : 'white'}
+      borderRadius="md"
+      boxShadow="sm"
+      _hover={{ bg: 'gray.100', cursor: 'pointer' }}
+      spacing={4} // Espacio entre el avatar y el texto
     >
       <Avatar name={conversation.username} src={conversation.avatar}>
-      <AvatarBadge  boxSize='1.25em' bg={spanClass}/>    
+        <AvatarBadge boxSize="1em" bg={onlineColor} />
       </Avatar>
-        <span style={{fontSize:'small'}} className={spanClass}>{isOnline ? 'Online': 'Offline'}</span>
-    </div>
+
+      <Box flex="1">
+        <Text fontWeight="bold">{conversation.username}</Text>
+        <Text fontSize="sm" color={isOnline ? 'green.500' : 'red.500'}>
+          {isOnline ? 'Online' : 'Offline'}
+        </Text>
+      </Box>
+    </HStack>
   )
 }
 

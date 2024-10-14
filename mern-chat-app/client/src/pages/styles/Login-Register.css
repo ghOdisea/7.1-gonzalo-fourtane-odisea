@@ -1,27 +1,17 @@
-#login-form,
-#signup-form{
+.login-container
+.register-container{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 2px;
 }
 
-.input-label{
-    display: flex;
-    font-size: medium;
+.login-heading , 
+.register-heading{
+    margin: 10px;
+
 }
 
-.login-button
-.register-button{
-    width: 120px;
-    height: 35px;
-    margin: 15px auto;
-    cursor: pointer;
+.auth-submit-btn{
+    margin: 10px;
 }
-
-a{
-    margin: 20px;
-    text-align: center;
-}
-

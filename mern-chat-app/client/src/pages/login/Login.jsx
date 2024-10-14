@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import useLogin from "../../hooks/useLogin"
 import '../styles/Login-Register.css'
-import { Button, Input } from "@chakra-ui/react"
+import { Button, Container, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react"
 
 const Login = () => {
 
@@ -17,30 +17,44 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} id="login-form">
-        <h2>Login</h2>  
-          <div className="inputs-container">
-            <label className="input-label">Username:</label>
-            <Input type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)} 
-              />
-            <label className="input-label">Password:</label>
-            <Input
-              focusBorderColor='blue.400' 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} /><br 
-              />
-          </div>
-        <Button className="login-button" type="submit" disabled={loading} colorScheme='teal' size='md'>Log in</Button><br/>
+  <Container className="login-container" mt={"100px"}>
+    <form  onSubmit={handleSubmit} className="login-form">
+
+      <FormControl>
+        <Heading 
+          className="login-heading" 
+          size={'lg'}
+          >
+          Login
+          </Heading>  
+            <FormLabel className="input-label">Username:</FormLabel>
+              <Input type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)} 
+                />
+            <FormLabel className="input-label">Password:</FormLabel>
+              <Input
+                focusBorderColor='blue.400' 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} />
+                <br />
+        <Button  
+          className="auth-submit-btn" 
+          type="submit" 
+          isLoading={loading} 
+          colorScheme='teal' 
+          size='md' 
+          >
+            Log in
+          </Button>
+          <br/>
         <Link to="/signup">First time here? Sign up! </Link>
+      </FormControl>
+    </form>
+  </Container> 
 
-      </form>
-
-    </div>
-  )
+    )
 }
 
 export default Login

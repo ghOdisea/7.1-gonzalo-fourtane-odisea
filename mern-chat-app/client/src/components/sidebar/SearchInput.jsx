@@ -2,9 +2,8 @@ import { ImSearch } from "react-icons/im";
 import { useState } from "react";
 import  useGetConversations  from '../../hooks/useGetConversations'
 import  useConversation  from '../../store/useConversation'
-import '../styles/sidebar/SearchInput.css'
 import toast from "react-hot-toast";
-import { Button, Input } from '@chakra-ui/react'
+import { Button, Container, Input } from '@chakra-ui/react'
 
 
 
@@ -31,18 +30,26 @@ const SearchInput = () => {
   }
 
   return (
-    <div className="sidebar-search">
+    <Container className="sidebar-search" h={'10dvh'}>
       <form id="search-form" onSubmit={handleSubmit}>
           <Input id="searching-input"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value) }
             variant="filled"
+            w={"65%"}
             />
-          <Button type="submit" colorScheme='teal' size='xs' className="search-button"><ImSearch /></Button>
+          <Button 
+            className="search-button" 
+            type="submit" 
+            colorScheme='teal' 
+            size='md' 
+            ml={"10px"}
+          ><ImSearch />
+          </Button>
           
       </form>
-  </div>
+  </Container>
   )
 }
 

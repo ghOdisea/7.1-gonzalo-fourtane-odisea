@@ -5,10 +5,7 @@
     justify-content: space-evenly;
     background-color: lightblue;
     color: black;
-    width: 60dvw;
-    height: 80dvh;
     max-width: 700px;
- 
 }
 /* Header */
 .chat-header{
